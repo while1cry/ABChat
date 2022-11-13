@@ -6,7 +6,7 @@
 
     <groupId>cn.douaol.abchat</groupId>
     <artifactId>ABChat</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
