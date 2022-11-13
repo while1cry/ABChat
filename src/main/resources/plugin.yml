@@ -1,0 +1,9 @@
+name: ABChat
+main: cn.douaol.abchat.Main
+author: Douaol
+version: 1.0-SNAPSHOT
+api-version: 1.13
+description: A plugin that helps you block swearing.
+commands:
+  abchat:
+    aliases: [abc, chat]
