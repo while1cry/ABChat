@@ -13,12 +13,16 @@ public class Config {
     public static boolean blockAdv = false;
     public static Double chatDelay = 1.00;
     public static Double repeatSimilarity = 85.00;
+    public static String prefix = "&b[&7ABChat&b] ";
+    public static String language = "en";
 
     public static void loadConfig() throws IOException {
         File configFile = new File(Main.instance.getDataFolder(), "config.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         config.options().copyDefaults(true);
+        config.addDefault("prefix", "&b[&7ABChat&b] ");
+        config.addDefault("language", "en");
         config.addDefault("block-filter", true);
         config.addDefault("block-domain", true);
         config.addDefault("block-repeat", true);
@@ -32,6 +36,8 @@ public class Config {
         blockAdv = config.getBoolean("block-adv");
         chatDelay = config.getDouble("chat-delay");
         repeatSimilarity = config.getDouble("repeat-similarity");
+        language = config.getString("language");
+        prefix = config.getString("prefix");
 
         config.save(configFile);
     }

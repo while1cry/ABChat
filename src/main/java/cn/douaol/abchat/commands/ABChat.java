@@ -3,11 +3,15 @@ package cn.douaol.abchat.commands;
 import cn.douaol.abchat.Main;
 import cn.douaol.abchat.data.Config;
 import cn.douaol.abchat.data.Filter;
+import cn.douaol.abchat.data.Message;
 import cn.douaol.abchat.data.ServerData;
+import cn.douaol.abchat.libs.ChatLib;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +21,14 @@ import java.util.Locale;
 public class ABChat implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+        Player playerSender;
+        if(!(sender instanceof Player)) {
+            playerSender = Bukkit.getPlayer("");
+        } else {
+            playerSender = (Player) sender;
+        }
         if(! sender.hasPermission("abchat.use")) {
-            sender.sendMessage("Unknown command. Type \"/help\" for help.");
+            sender.sendMessage(ChatLib.translateMessage(playerSender, Message.noPermission));
             return false;
         }
         if(args.length > 0) {
@@ -41,7 +51,7 @@ public class ABChat implements CommandExecutor {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            sender.sendMessage("§aFilter word added successfully!");
+                            sender.sendMessage(ChatLib.translateMessage(playerSender, Message.cmdFilterAdd));
                             return false;
                         }
                         if(args[1].toLowerCase(Locale.ROOT).equals("remove")) {
@@ -56,11 +66,11 @@ public class ABChat implements CommandExecutor {
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
-                                    sender.sendMessage("§aFilter word removed successfully!");
+                                    sender.sendMessage(ChatLib.translateMessage(playerSender, Message.cmdFilterRemove));
                                     return false;
                                 }
                             }
-                            sender.sendMessage("§cFilter word removed failed! Cannot find the word: " + args[2]);
+                            sender.sendMessage(ChatLib.translateMessage(playerSender, Message.cmdFilterNotFound) + args[2]);
                             return false;
                         }
                     }
@@ -68,14 +78,15 @@ public class ABChat implements CommandExecutor {
                     try {
                         Config.loadConfig();
                         Filter.loadFilter();
-                        sender.sendMessage("§aPlugin has been reloaded.");
+                        Message.loadMessage();
+                        sender.sendMessage(ChatLib.translateMessage(playerSender, Message.cmdReload));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     return false;
                 case "globalmute":
                     ServerData.globalMute = !ServerData.globalMute;
-                    sender.sendMessage("§aServer global mute mode toggle to: " + ServerData.globalMute);
+                    sender.sendMessage(ChatLib.translateMessage(playerSender, Message.cmdGlobalMute) + ServerData.globalMute);
                     return false;
             }
         }

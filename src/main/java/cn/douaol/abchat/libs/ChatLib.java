@@ -1,8 +1,7 @@
 package cn.douaol.abchat.libs;
 
-import cn.douaol.abchat.data.Config;
-import cn.douaol.abchat.data.Filter;
-import cn.douaol.abchat.data.PlayerData;
+import cn.douaol.abchat.data.*;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -14,12 +13,12 @@ public class ChatLib {
         message = removeCharacters(message);
         message = removeWhitelisted(message);
         if (hasFilterWords(message)) {
-            player.sendMessage("§cYour message has some words not allowed there.");
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockFilter));
             return true;
         }
         for (String str : PlayerData.getMessages(player)) {
             if (getSimilarityRatio(str, message) >= Config.repeatSimilarity) {
-                player.sendMessage("§cYour message may be repeated.");
+                player.sendMessage(ChatLib.translateMessage(player, Message.blockRepeat));
                 return true;
             }
         }
@@ -27,11 +26,20 @@ public class ChatLib {
         PlayerData.addMessage(player, message);
 
         if (PlayerData.isDelay(player) && !player.hasPermission("abchat.bypass.delay")) {
-            player.sendMessage("§cPlease speak slowly.");
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockDelay));
             return true;
         }
         PlayerData.setDelay(player, true);
         return false;
+    }
+
+    public static String translateMessage(Player player, String message) {
+        message = message.replaceAll("&", "§");
+        if(ServerData.hasPlaceholderAPI) {
+            message = PlaceholderAPI.setPlaceholders(player, message);
+        }
+        message = Config.prefix.replaceAll("&", "§") + message;
+        return message;
     }
 
     public static String removeCharacters(String message) {
@@ -45,15 +53,15 @@ public class ChatLib {
     }
 
     private static String removeWhitelisted(String message) {
-        for(String whitelist : Filter.whitelist) {
+        for (String whitelist : Filter.whitelist) {
             message = message.replaceAll(removeCharacters(whitelist), "");
         }
         return message;
     }
 
     private static boolean hasFilterWords(String message) {
-        for(String filters: Filter.filterWordList) {
-            if(message.contains(removeCharacters(filters.toLowerCase(Locale.ROOT)))) {
+        for (String filters : Filter.filterWordList) {
+            if (message.contains(removeCharacters(filters.toLowerCase(Locale.ROOT)))) {
                 return true;
             }
         }
