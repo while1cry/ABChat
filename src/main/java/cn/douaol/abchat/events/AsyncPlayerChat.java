@@ -8,9 +8,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.io.IOException;
+
 public class AsyncPlayerChat implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAsyncPlayerChat(AsyncPlayerChatEvent e) {
+    public void onAsyncPlayerChat(AsyncPlayerChatEvent e) throws IOException {
         if(ServerData.globalMute && !e.getPlayer().hasPermission("abchat.bypass.globalmute")) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(ChatLib.translateMessage(e.getPlayer(), Message.blockGlobalMute));

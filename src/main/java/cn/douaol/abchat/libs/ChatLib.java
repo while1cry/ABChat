@@ -4,32 +4,47 @@ import cn.douaol.abchat.data.*;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ChatLib {
-    public static boolean needBlock(Player player, String message) {
+    public static boolean needBlock(Player player, String message) throws IOException {
+        String unChangedMessage = message;
         message = message.toLowerCase(Locale.ROOT);
         message = removeCharacters(message);
         message = removeWhitelisted(message);
-        if (hasFilterWords(message)) {
+        if (Config.blockFilter && hasFilterWords(message)) {
             player.sendMessage(ChatLib.translateMessage(player, Message.blockFilter));
             return true;
         }
         for (String str : PlayerData.getMessages(player)) {
-            if (getSimilarityRatio(str, message) >= Config.repeatSimilarity) {
+            if(Objects.equals(message, "")) {
+                return false;
+            }
+            if (Config.blockRepeat && getSimilarityRatio(str, message) >= Config.repeatSimilarity) {
                 player.sendMessage(ChatLib.translateMessage(player, Message.blockRepeat));
                 return true;
             }
         }
 
-        PlayerData.addMessage(player, message);
+        if(Config.blockAdv && hasAdv(message) && !player.hasPermission("abchat.bypass.adv")) {
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockAdv));
+            return true;
+        }
+
+        if(Config.blockDomain && hasDomainName(unChangedMessage) && !player.hasPermission("abchat.bypass.domain")) {
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockDomain));
+            return true;
+        }
 
         if (PlayerData.isDelay(player) && !player.hasPermission("abchat.bypass.delay")) {
             player.sendMessage(ChatLib.translateMessage(player, Message.blockDelay));
             return true;
         }
         PlayerData.setDelay(player, true);
+        PlayerData.addMessage(player, message);
         return false;
     }
 
@@ -63,6 +78,31 @@ public class ChatLib {
         for (String filters : Filter.filterWordList) {
             if (message.contains(removeCharacters(filters.toLowerCase(Locale.ROOT)))) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasAdv(String message) {
+        for(String adv : Filter.advList) {
+            if(message.toLowerCase(Locale.ROOT).contains(adv.toLowerCase(Locale.ROOT))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasDomainName(String unChangedMessage) {
+        List<String> characters = Filter.ignoreCharacterList;
+        for(String whitelist : Filter.whitelist) {
+            unChangedMessage = unChangedMessage.replaceAll(whitelist, "");
+        }
+        String[] strings = unChangedMessage.split(characters.toString());
+        for (String string : strings) {
+            for (String domain : Filter.domainList) {
+                if (string.toLowerCase(Locale.ROOT).equals(domain.toLowerCase(Locale.ROOT)) && strings.length > 1) {
+                    return true;
+                }
             }
         }
         return false;

@@ -28,7 +28,7 @@ public class Config {
         config.addDefault("block-repeat", true);
         config.addDefault("block-adv", true);
         config.addDefault("chat-delay", 1.00);
-        config.addDefault("repeat-similarity", 85.00);
+        config.addDefault("repeat-similarity", 70.00);
 
         blockFilter = config.getBoolean("block-filter");
         blockDomain = config.getBoolean("block-domain");

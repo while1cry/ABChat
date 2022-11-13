@@ -1,7 +1,7 @@
 name: ABChat
 main: cn.douaol.abchat.Main
 author: Douaol
-version: 1.0.1-SNAPSHOT
+version: 1.0.2-SNAPSHOT
 api-version: 1.13
 softdepend: [PlaceholderAPI]
 description: A plugin that helps you block swearing.

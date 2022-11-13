@@ -27,7 +27,7 @@ public class Message {
         YamlConfiguration message = YamlConfiguration.loadConfiguration(messageFile);
 
         message.options().copyDefaults(true);
-        if (Objects.equals(Config.language.toLowerCase(Locale.ROOT), "zh_CN") || Objects.equals(Config.language.toLowerCase(Locale.ROOT), "cn")) {
+        if (Objects.equals(Config.language.toLowerCase(Locale.ROOT), "zh_cn") || Objects.equals(Config.language.toLowerCase(Locale.ROOT), "cn")) {
             message.addDefault("no-permission", "&c你没有这么做的权限!");
             message.addDefault("block.filter", "&c你的发言中似乎包含敏感词!已自动屏蔽!");
             message.addDefault("block.delay", "&7你的发言速度过快!已自动屏蔽!");
@@ -40,6 +40,7 @@ public class Message {
             message.addDefault("command.filter.not-found", "&c未找到该屏蔽词: ");
             message.addDefault("command.reload", "&a插件重载成功");
             message.addDefault("command.globalmute", "&a服务器全局禁言已设置为: ");
+            message.addDefault("log.blocked", "&a服务器全局禁言已设置为: ");
         } else {
             message.addDefault("no-permission", "&cYou have no permission to do that!");
             message.addDefault("block.filter", "&cYour message has some words not allowed there!");
