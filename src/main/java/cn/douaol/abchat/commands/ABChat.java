@@ -1,10 +1,7 @@
 package cn.douaol.abchat.commands;
 
 import cn.douaol.abchat.Main;
-import cn.douaol.abchat.data.Config;
-import cn.douaol.abchat.data.Filter;
-import cn.douaol.abchat.data.Message;
-import cn.douaol.abchat.data.ServerData;
+import cn.douaol.abchat.data.*;
 import cn.douaol.abchat.libs.ChatLib;
 import cn.douaol.abchat.libs.Emote;
 import org.bukkit.Bukkit;
@@ -81,6 +78,8 @@ public class ABChat implements CommandExecutor {
                         Filter.loadFilter();
                         Message.loadMessage();
                         Emote.loadEmotes();
+                        ChatFormat.loadFormat();
+
                         sender.sendMessage(ChatLib.translateMessage(playerSender, Message.cmdReload));
                     } catch (IOException e) {
                         e.printStackTrace();

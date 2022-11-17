@@ -1,6 +1,8 @@
 package cn.douaol.abchat.libs;
 
 import cn.douaol.abchat.Main;
+import cn.douaol.abchat.data.Config;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -29,6 +31,8 @@ public class Emote {
         return message;
     }
     public static void loadEmotes() throws IOException {
+        Bukkit.getConsoleSender().sendMessage(Config.prefix + "Loading emote.yml ...");
+
         File emoteFile = new File(Main.instance.getDataFolder(), "emote.yml");
         YamlConfiguration emote = YamlConfiguration.loadConfiguration(emoteFile);
 
@@ -42,8 +46,8 @@ public class Emote {
         emoteList.add("emote.lol/lol/&b&nLOL&r&f");
         emote.addDefault("emotes", emoteList);
 
-        emotes = emote.getStringList("emotes");
-
         emote.save(emoteFile);
+
+        emotes = emote.getStringList("emotes");
     }
 }

@@ -1,6 +1,7 @@
 package cn.douaol.abchat.data;
 
 import cn.douaol.abchat.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -25,6 +26,8 @@ public class Message {
     public static String cmdGlobalMute;
 
     public static void loadMessage() throws IOException {
+        Bukkit.getConsoleSender().sendMessage(Config.prefix + "Loading message_" + Config.language + ".yml ...");
+
         File messageFile = new File(Main.instance.getDataFolder() + "/messages", "message_" + Config.language + ".yml");
         YamlConfiguration message = YamlConfiguration.loadConfiguration(messageFile);
 
@@ -62,6 +65,8 @@ public class Message {
             message.addDefault("command.globalmute", "&aServer global mute mode toggle to: ");
         }
 
+        message.save(messageFile);
+
         noPermission = message.getString("no-permission");
         blockFilter = message.getString("block.filter");
         blockDelay = message.getString("block.delay");
@@ -76,7 +81,5 @@ public class Message {
         cmdFilterNotFound = message.getString("command.filter.not-found");
         cmdReload = message.getString("command.reload");
         cmdGlobalMute = message.getString("command.globalmute");
-
-        message.save(messageFile);
     }
 }

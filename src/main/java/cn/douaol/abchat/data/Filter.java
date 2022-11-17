@@ -1,6 +1,7 @@
 package cn.douaol.abchat.data;
 
 import cn.douaol.abchat.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -18,6 +19,8 @@ public class Filter {
     public static List<String> advList = new ArrayList<>();
 
     public static void loadFilter() throws IOException {
+        Bukkit.getConsoleSender().sendMessage(Config.prefix + "Loading filter.yml ...");
+
         File filterFile = new File(Main.instance.getDataFolder(), "filter.yml");
         YamlConfiguration filter = YamlConfiguration.loadConfiguration(filterFile);
 
@@ -131,13 +134,13 @@ public class Filter {
         ignoreCharacterList.add("\\?");
         filter.addDefault("ignore-characters", ignoreCharacterList);
 
+        filter.save(filterFile);
+
         Filter.filterWordList = filter.getStringList("filter-words");
         Filter.ignoreCharacterList = filter.getStringList("ignore-characters");
         Filter.whitelist = filter.getStringList("whitelist");
         Filter.domainList = filter.getStringList("domain-name");
         Filter.advList = filter.getStringList("adv");
         Filter.singleFilterWordList = filter.getStringList("single-filter");
-
-        filter.save(filterFile);
     }
 }

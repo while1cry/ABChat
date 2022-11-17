@@ -1,10 +1,10 @@
 name: ABChat
 main: cn.douaol.abchat.Main
 author: Douaol
-version: 1.1-SNAPSHOT
+version: 1.1.1-SNAPSHOT
 api-version: 1.13
-softdepend: [PlaceholderAPI]
-description: A plugin that helps you block swearing.
+softdepend: [PlaceholderAPI, Vault]
+description: A chat management plugin for bukkit.
 commands:
   abchat:
     aliases: [abc, chat]

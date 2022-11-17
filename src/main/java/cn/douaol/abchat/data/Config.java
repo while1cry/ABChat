@@ -1,6 +1,7 @@
 package cn.douaol.abchat.data;
 
 import cn.douaol.abchat.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -17,10 +18,12 @@ public class Config {
     public static boolean emote = true;
     public static Double chatDelay = 1.00;
     public static Double repeatSimilarity = 85.00;
-    public static String prefix = "&b[&7ABChat&b] ";
+    public static String prefix = "§b[§7ABChat§b] ";
     public static String language = "en";
 
     public static void loadConfig() throws IOException {
+        Bukkit.getConsoleSender().sendMessage(prefix + "Loading config.yml ...");
+
         File configFile = new File(Main.instance.getDataFolder(), "config.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
@@ -38,6 +41,8 @@ public class Config {
         config.addDefault("chat-delay", 1.00);
         config.addDefault("repeat-similarity", 70.00);
 
+        config.save(configFile);
+
         blockFilter = config.getBoolean("block-filter");
         blockDomain = config.getBoolean("block-domain");
         blockRepeat = config.getBoolean("block-repeat");
@@ -50,8 +55,6 @@ public class Config {
         chatDelay = config.getDouble("chat-delay");
         repeatSimilarity = config.getDouble("repeat-similarity");
         language = config.getString("language");
-        prefix = config.getString("prefix");
-
-        config.save(configFile);
+        prefix = config.getString("prefix").replaceAll("&", "§");
     }
 }
