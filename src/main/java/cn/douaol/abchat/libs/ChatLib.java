@@ -1,6 +1,7 @@
 package cn.douaol.abchat.libs;
 
 import cn.douaol.abchat.data.*;
+import com.spreada.utils.chinese.ZHConverter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
@@ -8,56 +9,76 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class ChatLib {
     public static boolean needBlock(Player player, String message) throws IOException {
-        String unChangedMessage = message;
-        message = message.toLowerCase(Locale.ROOT);
-        message = removeCharacters(message);
-        message = removeWhitelisted(message);
-        if (Config.blockFilter && hasFilterWords(message)) {
-            player.sendMessage(ChatLib.translateMessage(player, Message.blockFilter));
+
+        if (Config.antiUnicode && hasUnicode(message) && !player.hasPermission("abchat.bypass.unicode")) {
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockUnicode));                                              //Anti Unicode
             return true;
         }
+
+        String unChangedMessage = message;
+        message = message.toLowerCase(Locale.ROOT); //To Lower Case
+        message = removeCharacters(message);        //remove Characters
+        message = removeWhitelisted(message);       //remove whitelisted
+        message = tcToCHS(message);
+
+        if (Config.blockFilter && hasFilterWords(message)) {
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockFilter));                                               //Filter words
+            return true;
+        }
+
         for (String str : PlayerData.getMessages(player)) {
-            if(Objects.equals(message, "")) {
+            if (Objects.equals(message, "")) {
                 return false;
             }
             if (Config.blockRepeat && getSimilarityRatio(str, message) >= Config.repeatSimilarity) {
-                player.sendMessage(ChatLib.translateMessage(player, Message.blockRepeat));
+                player.sendMessage(ChatLib.translateMessage(player, Message.blockRepeat));                                           //Repeat?
                 return true;
             }
         }
 
-        if(Config.blockAdv && hasAdv(message) && !player.hasPermission("abchat.bypass.adv")) {
-            player.sendMessage(ChatLib.translateMessage(player, Message.blockAdv));
+        if (Config.blockAdv && hasAdv(message) && !player.hasPermission("abchat.bypass.adv")) {
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockAdv));                                                  //Adv?
             return true;
         }
 
-        if(Config.blockDomain && hasDomainName(unChangedMessage) && !player.hasPermission("abchat.bypass.domain")) {
-            player.sendMessage(ChatLib.translateMessage(player, Message.blockDomain));
+        if (Config.blockDomain && hasDomainName(unChangedMessage) && !player.hasPermission("abchat.bypass.domain")) {
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockDomain));                                               //Domain?
+            return true;
+        }
+
+        if (Config.blockSingleFilter && !hasSingleFilter(message).equals("")) {
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockSingleFilter + hasSingleFilter(message)));     //Single Words
             return true;
         }
 
         if (PlayerData.isDelay(player) && !player.hasPermission("abchat.bypass.delay")) {
-            player.sendMessage(ChatLib.translateMessage(player, Message.blockDelay));
+            player.sendMessage(ChatLib.translateMessage(player, Message.blockDelay));                                                //Delay?
             return true;
         }
         PlayerData.setDelay(player, true);
-        PlayerData.addMessage(player, message);
+        PlayerData.addMessage(player, message);                                                                                      //Send
         return false;
     }
 
     public static String translateMessage(Player player, String message) {
         message = message.replaceAll("&", "§");
-        if(ServerData.hasPlaceholderAPI) {
+        if (ServerData.hasPlaceholderAPI) {
             message = PlaceholderAPI.setPlaceholders(player, message);
         }
         message = Config.prefix.replaceAll("&", "§") + message;
         return message;
     }
 
-    public static String removeCharacters(String message) {
+    private static String tcToCHS(String message) {
+        ZHConverter converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
+        return converter.convert(message);
+    }
+
+    private static String removeCharacters(String message) {
         List<String> characters = Filter.ignoreCharacterList;
         String[] strings = message.split(characters.toString());
         StringBuilder sb = new StringBuilder();
@@ -76,6 +97,8 @@ public class ChatLib {
 
     private static boolean hasFilterWords(String message) {
         for (String filters : Filter.filterWordList) {
+            ZHConverter converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
+            filters = converter.convert(filters);
             if (message.contains(removeCharacters(filters.toLowerCase(Locale.ROOT)))) {
                 return true;
             }
@@ -84,8 +107,8 @@ public class ChatLib {
     }
 
     private static boolean hasAdv(String message) {
-        for(String adv : Filter.advList) {
-            if(message.toLowerCase(Locale.ROOT).contains(adv.toLowerCase(Locale.ROOT))) {
+        for (String adv : Filter.advList) {
+            if (message.toLowerCase(Locale.ROOT).contains(adv.toLowerCase(Locale.ROOT))) {
                 return true;
             }
         }
@@ -94,7 +117,7 @@ public class ChatLib {
 
     private static boolean hasDomainName(String unChangedMessage) {
         List<String> characters = Filter.ignoreCharacterList;
-        for(String whitelist : Filter.whitelist) {
+        for (String whitelist : Filter.whitelist) {
             unChangedMessage = unChangedMessage.replaceAll(whitelist, "");
         }
         String[] strings = unChangedMessage.split(characters.toString());
@@ -106,6 +129,20 @@ public class ChatLib {
             }
         }
         return false;
+    }
+
+    private static String hasSingleFilter(String message) {
+        for (String singleFilter : Filter.singleFilterWordList) {
+            if (message.toLowerCase(Locale.ROOT).replaceAll(singleFilter.toLowerCase(Locale.ROOT), "").equals("")) {
+                return singleFilter;
+            }
+        }
+        return "";
+    }
+
+    private static boolean hasUnicode(String message) {
+        Pattern pattern = Pattern.compile("[\\uFF10-\\uFF5A]");
+        return pattern.matcher(message).find();
     }
 
     private static float getSimilarityRatio(String str, String target) {

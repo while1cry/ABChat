@@ -16,6 +16,8 @@ public class Message {
     public static String blockDomain;
     public static String blockAdv;
     public static String blockGlobalMute;
+    public static String blockSingleFilter;
+    public static String blockUnicode;
     public static String cmdFilterAdd;
     public static String cmdFilterRemove;
     public static String cmdFilterNotFound;
@@ -27,7 +29,7 @@ public class Message {
         YamlConfiguration message = YamlConfiguration.loadConfiguration(messageFile);
 
         message.options().copyDefaults(true);
-        if (Objects.equals(Config.language.toLowerCase(Locale.ROOT), "zh_cn") || Objects.equals(Config.language.toLowerCase(Locale.ROOT), "cn")) {
+        if (Objects.equals(Config.language.toLowerCase(Locale.ROOT), "zh_cn") || Objects.equals(Config.language.toLowerCase(Locale.ROOT), "cn") || Objects.equals(Config.language.toLowerCase(Locale.ROOT), "tw")) {
             message.addDefault("no-permission", "&c你没有这么做的权限!");
             message.addDefault("block.filter", "&c你的发言中似乎包含敏感词!已自动屏蔽!");
             message.addDefault("block.delay", "&7你的发言速度过快!已自动屏蔽!");
@@ -35,6 +37,8 @@ public class Message {
             message.addDefault("block.domain", "&c你的发言似乎包含了一些网址!已自动屏蔽!");
             message.addDefault("block.adv", "&c你的发言可能是广告!已自动屏蔽!");
             message.addDefault("block.globalmute", "&c服务器已开启全局禁言!");
+            message.addDefault("block.singlefilter", "&c看样子你不能输入: ");
+            message.addDefault("block.unicode", "&c你似乎输入了Unicode字符!已自动屏蔽!");
             message.addDefault("command.filter.add", "&a屏蔽词添加成功!");
             message.addDefault("command.filter.remove", "&a屏蔽词删除成功!");
             message.addDefault("command.filter.not-found", "&c未找到该屏蔽词: ");
@@ -49,6 +53,8 @@ public class Message {
             message.addDefault("block.domain", "&cYour message has some domain-name!");
             message.addDefault("block.adv", "&cYour message seems like adv.!");
             message.addDefault("block.globalmute", "&cServer global mute is enabled!");
+            message.addDefault("block.singlefilter", "&cYou cannot type: ");
+            message.addDefault("block.unicode", "&cYou cannot type Unicode!");
             message.addDefault("command.filter.add", "&aFilter word added successfully!");
             message.addDefault("command.filter.remove", "&aFilter word removed successfully!");
             message.addDefault("command.filter.not-found", "&cCannot find the word: ");
@@ -63,6 +69,8 @@ public class Message {
         blockDomain = message.getString("block.domain");
         blockAdv = message.getString("block.adv");
         blockGlobalMute = message.getString("block.globalmute");
+        blockSingleFilter = message.getString("block.singlefilter");
+        blockUnicode = message.getString("block.unicode");
         cmdFilterAdd = message.getString("command.filter.add");
         cmdFilterRemove = message.getString("command.filter.remove");
         cmdFilterNotFound = message.getString("command.filter.not-found");

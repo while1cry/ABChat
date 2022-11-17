@@ -1,8 +1,10 @@
 package cn.douaol.abchat.events;
 
+import cn.douaol.abchat.data.Config;
 import cn.douaol.abchat.data.Message;
 import cn.douaol.abchat.data.ServerData;
 import cn.douaol.abchat.libs.ChatLib;
+import cn.douaol.abchat.libs.Emote;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,6 +22,9 @@ public class AsyncPlayerChat implements Listener {
         }
         if(ChatLib.needBlock(e.getPlayer(), e.getMessage())) {
             e.setCancelled(true);
+        }
+        if(! e.isCancelled() && Config.emote) {
+            e.setMessage(Emote.translateEmote(e.getPlayer(), e.getMessage()));
         }
     }
 }

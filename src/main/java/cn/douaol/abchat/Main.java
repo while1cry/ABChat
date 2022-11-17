@@ -8,6 +8,7 @@ import cn.douaol.abchat.data.ServerData;
 import cn.douaol.abchat.events.AsyncPlayerChat;
 import cn.douaol.abchat.events.PlayerJoin;
 import cn.douaol.abchat.events.PlayerQuit;
+import cn.douaol.abchat.libs.Emote;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +26,7 @@ public class Main extends JavaPlugin {
         Config.loadConfig();
         Filter.loadFilter();
         Message.loadMessage();
+        Emote.loadEmotes();
 
         ServerData.checkServer();
 
