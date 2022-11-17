@@ -6,7 +6,7 @@
 
     <groupId>cn.douaol.abchat</groupId>
     <artifactId>ABChat</artifactId>
-    <version>1.0.2</version>
+    <version>1.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -37,6 +37,13 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.10.10</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.spreada</groupId>
+            <artifactId>ZHConverter</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/zhconvertor.jar</systemPath>
         </dependency>
     </dependencies>
 
