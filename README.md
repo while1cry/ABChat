@@ -15,7 +15,7 @@ Description :<br>
 	Will be added in the future : <br>
 	- Log.<br>
 	- Anti Unicode.<br>
-	- Configurable channels for each player.<br>
+	- Configurable customize channels created by players.<br>
 	- Configurable hover message ( regex ).<br>
 	- More rich join/quit special effects.<br>
 	- APIs for other plugins.<br>
