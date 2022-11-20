@@ -31,7 +31,7 @@ public class Emote {
         return message;
     }
     public static void loadEmotes() throws IOException {
-        Bukkit.getConsoleSender().sendMessage(Config.prefix + "Loading emote.yml ...");
+        Bukkit.getConsoleSender().sendMessage(Config.prefix + "§eLoading emote.yml ...");
 
         File emoteFile = new File(Main.instance.getDataFolder(), "emote.yml");
         YamlConfiguration emote = YamlConfiguration.loadConfiguration(emoteFile);

@@ -15,14 +15,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 public class AsyncPlayerChat implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onAsyncPlayerChat(AsyncPlayerChatEvent e) throws IOException {
+    public void onAsyncPlayerChat(AsyncPlayerChatEvent e) {
         if (ServerData.globalMute && !e.getPlayer().hasPermission("abchat.bypass.globalmute")) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(ChatLib.translateMessage(e.getPlayer(), Message.blockGlobalMute));

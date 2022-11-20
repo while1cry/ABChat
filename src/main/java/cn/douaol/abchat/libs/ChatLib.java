@@ -5,36 +5,24 @@ import com.spreada.utils.chinese.ZHConverter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class ChatLib {
-    public static boolean needBlock(Player player, String message) throws IOException {
-
-        if (Config.antiUnicode && hasUnicode(message) && !player.hasPermission("abchat.bypass.unicode")) {
-            player.sendMessage(ChatLib.translateMessage(player, Message.blockUnicode));                                              //Anti Unicode
-            return true;
-        }
-
+    public static boolean needBlock(Player player, String message) {
         String unChangedMessage = message;
         message = message.toLowerCase(Locale.ROOT); //To Lower Case
         message = removeCharacters(message);        //remove Characters
         message = removeWhitelisted(message);       //remove whitelisted
         message = tcToCHS(message);
 
-        if (Config.blockFilter && hasFilterWords(message)) {
+        if (Config.blockFilter && hasFilterWords(message) && !player.hasPermission("abchat.bypass.filter")) {
             player.sendMessage(ChatLib.translateMessage(player, Message.blockFilter));                                               //Filter words
             return true;
         }
 
         for (String str : PlayerData.getMessages(player)) {
-            if (Objects.equals(message, "")) {
-                return false;
-            }
-            if (Config.blockRepeat && getSimilarityRatio(str, message) >= Config.repeatSimilarity) {
+            if (Config.blockRepeat && getSimilarityRatio(str, message) >= Config.repeatSimilarity && !player.hasPermission("abchat.bypass.repeat")) {
                 player.sendMessage(ChatLib.translateMessage(player, Message.blockRepeat));                                           //Repeat?
                 return true;
             }
@@ -50,7 +38,7 @@ public class ChatLib {
             return true;
         }
 
-        if (Config.blockSingleFilter && !hasSingleFilter(message).equals("")) {
+        if (Config.blockSingleFilter && !hasSingleFilter(message).equals("") && !player.hasPermission("abchat.bypass.singlefilter")) {
             player.sendMessage(ChatLib.translateMessage(player, Message.blockSingleFilter + hasSingleFilter(message)));     //Single Words
             return true;
         }
@@ -138,11 +126,6 @@ public class ChatLib {
             }
         }
         return "";
-    }
-
-    private static boolean hasUnicode(String message) {
-        Pattern pattern = Pattern.compile("[\\uFF10-\\uFF5A]");
-        return pattern.matcher(message).find();
     }
 
     private static float getSimilarityRatio(String str, String target) {

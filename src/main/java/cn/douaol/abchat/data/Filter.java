@@ -19,7 +19,7 @@ public class Filter {
     public static List<String> advList = new ArrayList<>();
 
     public static void loadFilter() throws IOException {
-        Bukkit.getConsoleSender().sendMessage(Config.prefix + "Loading filter.yml ...");
+        Bukkit.getConsoleSender().sendMessage(Config.prefix + "§eLoading filter.yml ...");
 
         File filterFile = new File(Main.instance.getDataFolder(), "filter.yml");
         YamlConfiguration filter = YamlConfiguration.loadConfiguration(filterFile);

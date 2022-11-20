@@ -18,7 +18,7 @@ public class ChatFormat {
     public static List<String> qm = new ArrayList<>();
 
     public static void loadFormat() throws IOException {
-        Bukkit.getConsoleSender().sendMessage(Config.prefix + "Loading chat-format.yml ...");
+        Bukkit.getConsoleSender().sendMessage(Config.prefix + "§eLoading chat-format.yml ...");
 
         File formatFile = new File(Main.instance.getDataFolder(), "chat-format.yml");
         YamlConfiguration format = YamlConfiguration.loadConfiguration(formatFile);
@@ -28,7 +28,7 @@ public class ChatFormat {
         List<String> formatList = new ArrayList<>();
         formatList.add("default: &7<PLAYER>: <MESSAGE>");
         formatList.add("example: <PREFIX> <PLAYER>&f: <MESSAGE>");
-        formatList.add("owner: <PREFIX> <PLAYER> <SUFFIX>&f: <MESSAGE>");
+        formatList.add("owner: <PREFIX> <PLAYER><SUFFIX>&f: <MESSAGE>");
         format.addDefault("chat-format.format", formatList);
         format.addDefault("join-message.enable", true);
         List<String> jmList = new ArrayList<>();
