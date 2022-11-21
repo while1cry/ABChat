@@ -3,7 +3,7 @@ package cn.douaol.abchat.commands;
 import cn.douaol.abchat.Main;
 import cn.douaol.abchat.data.*;
 import cn.douaol.abchat.libs.ChatLib;
-import cn.douaol.abchat.libs.Emote;
+import cn.douaol.abchat.misc.Load;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -74,11 +74,7 @@ public class ABChat implements CommandExecutor {
                     }
                 case "reload":
                     try {
-                        Config.loadConfig();
-                        Filter.loadFilter();
-                        Message.loadMessage();
-                        Emote.loadEmotes();
-                        ChatFormat.loadFormat();
+                        Load.load();
 
                         sender.sendMessage(ChatLib.translateMessage(playerSender, Message.cmdReload));
                     } catch (IOException e) {

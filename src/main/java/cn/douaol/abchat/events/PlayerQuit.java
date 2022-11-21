@@ -19,7 +19,7 @@ public class PlayerQuit implements Listener {
         if (ChatFormat.quitMessage) {
             for (String qm : ChatFormat.qm) {
                 String group = qm.split(": ")[0];
-                String group2 = Main.getChat().getPrimaryGroup(e.getPlayer());
+                String group2 = Main.chat.getPrimaryGroup(e.getPlayer());
                 if (Objects.equals(group2.toLowerCase(Locale.ROOT), group.toLowerCase(Locale.ROOT))) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(qm.split(": ")[1]);
@@ -27,9 +27,9 @@ public class PlayerQuit implements Listener {
                         sb.append(": ").append(qm.split(": ")[i]);
                     }
                     String message = sb.toString();
-                    message = message.replaceAll("<PREFIX>", Main.getChat().getPlayerPrefix(e.getPlayer()));
+                    message = message.replaceAll("<PREFIX>", Main.chat.getPlayerPrefix(e.getPlayer()));
                     message = message.replaceAll("<PLAYER>", e.getPlayer().getName());
-                    message = message.replaceAll("<SUFFIX>", Main.getChat().getPlayerSuffix(e.getPlayer()));
+                    message = message.replaceAll("<SUFFIX>", Main.chat.getPlayerSuffix(e.getPlayer()));
                     if (ServerData.hasPlaceholderAPI) {
                         message = PlaceholderAPI.setPlaceholders(e.getPlayer(), message);
                     }

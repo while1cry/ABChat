@@ -34,6 +34,9 @@ public class AsyncPlayerChat implements Listener {
         if (Config.emote) {
             e.setMessage(Emote.translateEmote(e.getPlayer(), e.getMessage()));
         }
+        if(e.getPlayer().hasPermission("abchat.color")) {
+            e.setMessage(e.getMessage().replaceAll("&", "§"));
+        }
         if (ChatFormat.formatChat) {
             if (!ServerData.hasVault) {
                 return;
@@ -42,7 +45,7 @@ public class AsyncPlayerChat implements Listener {
             List<String> format = ChatFormat.format;
             for (String fs : format) {
                 String group = fs.split(": ")[0];
-                String group2 = Main.getChat().getPrimaryGroup(e.getPlayer());
+                String group2 = Main.chat.getPrimaryGroup(e.getPlayer());
                 if (Objects.equals(group2.toLowerCase(Locale.ROOT), group.toLowerCase(Locale.ROOT))) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(fs.split(": ")[1]);
@@ -50,9 +53,9 @@ public class AsyncPlayerChat implements Listener {
                         sb.append(": ").append(fs.split(": ")[i]);
                     }
                     String message = sb.toString();
-                    message = message.replaceAll("<PREFIX>", Main.getChat().getPlayerPrefix(e.getPlayer()));
+                    message = message.replaceAll("<PREFIX>", Main.chat.getPlayerPrefix(e.getPlayer()));
                     message = message.replaceAll("<PLAYER>", e.getPlayer().getName());
-                    message = message.replaceAll("<SUFFIX>", Main.getChat().getPlayerSuffix(e.getPlayer()));
+                    message = message.replaceAll("<SUFFIX>", Main.chat.getPlayerSuffix(e.getPlayer()));
                     if (ServerData.hasPlaceholderAPI) {
                         message = PlaceholderAPI.setPlaceholders(e.getPlayer(), message);
                     }

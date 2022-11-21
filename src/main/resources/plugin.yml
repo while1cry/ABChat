@@ -17,5 +17,3 @@ permissions:
     default: op
   abchat.bypass.delay:
     default: op
-  abchat.bypass.global:
-    default: op

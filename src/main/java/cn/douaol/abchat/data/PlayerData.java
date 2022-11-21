@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class PlayerData {
-    private static Map<Player, List<String>> playerDataMap = new HashMap<>();
+    public static Map<Player, List<String>> playerDataMap = new HashMap<>();
     public static void addPlayer(Player player) {
         List<String> list = new ArrayList<>();
         list.add("FALSE");

@@ -13,6 +13,7 @@ public class Config {
     public static boolean blockRepeat = false;
     public static boolean blockAdv = false;
     public static boolean blockSingleFilter = false;
+    public static boolean antiUnicode = false;
     public static boolean emote = true;
     public static Double chatDelay = 1.00;
     public static Double repeatSimilarity = 85.00;
@@ -33,6 +34,7 @@ public class Config {
         config.addDefault("block-domain", true);
         config.addDefault("block-repeat", true);
         config.addDefault("block-adv", true);
+        config.addDefault("anti-unicode", true);
         config.addDefault("use-regex", true);
         config.addDefault("emote", true);
         config.addDefault("chat-delay", 1.00);
@@ -45,6 +47,7 @@ public class Config {
         blockRepeat = config.getBoolean("block-repeat");
         blockAdv = config.getBoolean("block-adv");
         blockSingleFilter = config.getBoolean("block-single-filter");
+        antiUnicode = config.getBoolean("anti-unicode");
         emote = config.getBoolean("emote");
         chatDelay = config.getDouble("chat-delay");
         repeatSimilarity = config.getDouble("repeat-similarity");

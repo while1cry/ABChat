@@ -132,6 +132,22 @@ public class Filter {
         ignoreCharacterList.add("\\,");
         ignoreCharacterList.add("\\/");
         ignoreCharacterList.add("\\?");
+        ignoreCharacterList.add("！");
+        ignoreCharacterList.add("￥");
+        ignoreCharacterList.add("（");
+        ignoreCharacterList.add("）");
+        ignoreCharacterList.add("【");
+        ignoreCharacterList.add("】");
+        ignoreCharacterList.add("；");
+        ignoreCharacterList.add("：");
+        ignoreCharacterList.add("‘");
+        ignoreCharacterList.add("“");
+        ignoreCharacterList.add("、");
+        ignoreCharacterList.add("，");
+        ignoreCharacterList.add("。");
+        ignoreCharacterList.add("《");
+        ignoreCharacterList.add("》");
+        ignoreCharacterList.add("？");
         filter.addDefault("ignore-characters", ignoreCharacterList);
 
         filter.save(filterFile);

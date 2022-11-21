@@ -7,12 +7,24 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class ChatLib {
     public static boolean needBlock(Player player, String message) {
+        if (Config.antiUnicode && Pattern.matches("[\\uff10-\\uff19]", message) && !player.hasPermission("abchat.bypass.unicode")) {
+            player.sendMessage(translateMessage(player, Message.blockUnicode));
+            return true;
+        } else if(Config.antiUnicode && Pattern.matches("[\\uff21-\\uff5a]", message) && !player.hasPermission("abchat.bypass.unicode")) {
+            player.sendMessage(translateMessage(player, Message.blockUnicode));
+            return true;
+        }
+
         String unChangedMessage = message;
         message = message.toLowerCase(Locale.ROOT); //To Lower Case
         message = removeCharacters(message);        //remove Characters
+        if(message.equals("")) {
+            message = unChangedMessage;
+        }
         message = removeWhitelisted(message);       //remove whitelisted
         message = tcToCHS(message);
 

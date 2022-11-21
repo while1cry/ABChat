@@ -1,11 +1,12 @@
 package cn.douaol.abchat;
 
 import cn.douaol.abchat.commands.ABChat;
-import cn.douaol.abchat.data.*;
+import cn.douaol.abchat.data.Config;
+import cn.douaol.abchat.data.ServerData;
 import cn.douaol.abchat.events.AsyncPlayerChat;
 import cn.douaol.abchat.events.PlayerJoin;
 import cn.douaol.abchat.events.PlayerQuit;
-import cn.douaol.abchat.libs.Emote;
+import cn.douaol.abchat.misc.Load;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 public class Main extends JavaPlugin {
     public static Main instance;
-    private static Chat chat = null;
+    public static Chat chat = null;
 
     public void onEnable() {
         instance = this;
@@ -26,14 +27,11 @@ public class Main extends JavaPlugin {
             RegisteredServiceProvider<Chat> rps = getServer().getServicesManager().getRegistration(Chat.class);
             chat = rps.getProvider();
         }
+        Bukkit.getConsoleSender().sendMessage(Config.prefix + "§aHas been Enabled!");
     }
 
     public static void initPlugin() throws IOException {
-        Config.loadConfig();
-        Filter.loadFilter();
-        Message.loadMessage();
-        Emote.loadEmotes();
-        ChatFormat.loadFormat();
+        Load.load();
 
         ServerData.checkServer();
 
@@ -42,9 +40,5 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerQuit(), instance);
 
         Bukkit.getPluginCommand("abchat").setExecutor(new ABChat());
-    }
-
-    public static Chat getChat() {
-        return chat;
     }
 }
